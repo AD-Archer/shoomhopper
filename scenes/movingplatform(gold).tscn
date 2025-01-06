@@ -1,13 +1,13 @@
 [gd_scene load_steps=4 format=3 uid="uid://b7ktacb7ubrku"]
 
 [ext_resource type="Texture2D" uid="uid://c5pnlvi7l4lwa" path="res://assets/midground_/autumn_.png" id="1_qqll1"]
-[ext_resource type="Script" path="res://scenes/movingplatform(gold).gd" id="1_vptje"]
+[ext_resource type="Script" path="res://scripts/movingplatform(gold).gd" id="3_3ct8d"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wafsq"]
 size = Vector2(32, 10)
 
 [node name="MovingPlatform" type="StaticBody2D"]
-script = ExtResource("1_vptje")
+script = ExtResource("3_3ct8d")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_qqll1")

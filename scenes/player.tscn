@@ -21,29 +21,48 @@
 resource_name = "player.md"
 script/source = "extends CharacterBody2D
 
-# Constants for movement and jump behavior
 var SPEED = 150.0
 var JUMP_VELOCITY = -330.0
 var gravity_vector : Vector2 = ProjectSettings.get_setting(\"physics/2d/default_gravity_vector\")
 var gravity_magnitude : int = ProjectSettings.get_setting(\"physics/2d/default_gravity\")
 var running = true
+var player_x : float = 0.0
+var fall_buffer = 30
+var player_max_height = 0
+@onready var timer = $Timer
+
+func _ready() -> void:
+	pass
+
+func _process(delta: float) -> void:
+	player_x = position.x
+	
+	if player_x > player_max_height:
+		var player_max_height = player_x
+		if player_x < player_max_height - fall_buffer:
+			#death logic
+			print(\"You died!\")
+			Engine.time_scale = 0.5
+			queue_free()
+			timer.start()
+
+
+func _on_timer_timeout() -> void:
+		Engine.time_scale = 1
+		get_tree().reload_current_scene()
 
 func _physics_process(delta: float) -> void:
-	# Apply gravity if the player is not on the floor
 	if not is_on_floor():
 		velocity.y += gravity_magnitude * delta
 	else:
-		# If the player is on the ground, set the velocity to make them jump constantly
 		velocity.y = JUMP_VELOCITY
 
-	# Get movement input for left/right movement (continuous input)
 	var direction := Input.get_axis(\"move_left\", \"move_right\")
 	if direction != 0:
 		velocity.x = direction * SPEED
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)  # Apply deceleration when no input
+		velocity.x = move_toward(velocity.x, 0, SPEED)
 
-	# Move the player
 	move_and_slide()
 "
 

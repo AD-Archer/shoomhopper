@@ -1,9 +1,8 @@
-[gd_scene load_steps=27 format=4 uid="uid://bokxsctcx0sbg"]
+[gd_scene load_steps=28 format=4 uid="uid://bokxsctcx0sbg"]
 
 [ext_resource type="PackedScene" uid="uid://ga0nehdw5pin" path="res://scenes/player.tscn" id="1_vapkw"]
 [ext_resource type="Texture2D" uid="uid://g5x4wp61jbkv" path="res://assets/foreground_/foreground_.png" id="2_vvndj"]
 [ext_resource type="Texture2D" uid="uid://bk1n2i0w7l55o" path="res://assets/background_/sky_.png" id="3_iafay"]
-[ext_resource type="Script" path="res://scripts/followingkillzone.gd" id="3_measc"]
 [ext_resource type="Texture2D" uid="uid://c7psu3soooqfq" path="res://assets/background_/terrain_.png" id="4_sh42j"]
 [ext_resource type="Texture2D" uid="uid://j03kad768vp8" path="res://assets/midground_/winter_.png" id="5_ph7md"]
 [ext_resource type="Texture2D" uid="uid://xsaot7aje17d" path="res://assets/midground_/summer_.png" id="6_yql57"]
@@ -11,10 +10,9 @@
 [ext_resource type="Texture2D" uid="uid://ywld24vb3vv5" path="res://assets/objects_/staticObjects_.png" id="8_g4e6j"]
 [ext_resource type="Texture2D" uid="uid://c66qvd5t0uqk5" path="res://assets/objects_/items_.png" id="9_mkbyn"]
 [ext_resource type="PackedScene" uid="uid://yw5aias0uhp" path="res://scenes/killzone.tscn" id="10_0wmlh"]
-[ext_resource type="PackedScene" uid="uid://b7ktacb7ubrku" path="res://scenes/movingplatform(gold).tscn" id="12_ifa4h"]
 [ext_resource type="PackedScene" uid="uid://ddslhqipe5jvh" path="res://scenes/greenplatform.tscn" id="13_ti3hp"]
-
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_nfr5u"]
+[ext_resource type="PackedScene" uid="uid://bg8r14jwjpqdt" path="res://scenes/platform_spawner.tscn" id="14_urrj1"]
+[ext_resource type="Script" path="res://scripts/platform_spawner.gd" id="14_vij65"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m8h11"]
 texture = ExtResource("2_vvndj")
@@ -2017,6 +2015,14 @@ texture = ExtResource("9_mkbyn")
 sources/0 = SubResource("TileSetAtlasSource_5fc3s")
 sources/1 = SubResource("TileSetAtlasSource_8n36f")
 
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_nfr5u"]
+
+[sub_resource type="Curve2D" id="Curve2D_yegrm"]
+_data = {
+"points": PackedVector2Array(0.424017, 2.5441, -0.424017, -2.5441, 114, -249, 0, 0, 0, 0, -121, -253, 0, 0, 0, 0, -122, 27, 0, 0, 0, 0, 113, 28, 0, 0, 0, 0, 116, -249)
+}
+point_count = 5
+
 [node name="Game" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_vapkw")]
@@ -2028,15 +2034,8 @@ position = Vector2(-8, 6)
 position = Vector2(-1, 3)
 zoom = Vector2(8, 8)
 
-[node name="killzone2" parent="Player" instance=ExtResource("10_0wmlh")]
-position = Vector2(5, -66)
-collision_layer = 7
-collision_mask = 7
-script = ExtResource("3_measc")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/killzone2"]
-position = Vector2(-3, 86)
-shape = SubResource("WorldBoundaryShape2D_nfr5u")
+[node name="Timer" type="Timer" parent="Player"]
+wait_time = 0.5
 
 [node name="Layers" type="Node" parent="."]
 
@@ -2060,27 +2059,21 @@ tile_set = SubResource("TileSet_a1sko")
 
 [node name="Platforms" type="Node" parent="."]
 
-[node name="goldplatform(moving)" parent="Platforms" instance=ExtResource("12_ifa4h")]
-position = Vector2(44, -61)
-
 [node name="greenplatform" parent="Platforms" instance=ExtResource("13_ti3hp")]
 position = Vector2(-6, 38)
 
-[node name="greenplatform2" parent="Platforms" instance=ExtResource("13_ti3hp")]
-position = Vector2(46, 16)
-
-[node name="greenplatform3" parent="Platforms" instance=ExtResource("13_ti3hp")]
-position = Vector2(99, -2)
-
-[node name="greenplatform4" parent="Platforms" instance=ExtResource("13_ti3hp")]
-position = Vector2(12, -18)
-
-[node name="greenplatform5" parent="Platforms" instance=ExtResource("13_ti3hp")]
-position = Vector2(-47, -28)
-
 [node name="killzone" parent="." instance=ExtResource("10_0wmlh")]
+visible = false
 position = Vector2(-18, 58)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="killzone"]
 position = Vector2(14, 34)
 shape = SubResource("WorldBoundaryShape2D_nfr5u")
+
+[node name="PlatformSpawner" parent="." instance=ExtResource("14_urrj1")]
+
+[node name="Platform spawn zone2" type="Path2D" parent="PlatformSpawner"]
+curve = SubResource("Curve2D_yegrm")
+script = ExtResource("14_vij65")
+
+[connection signal="timeout" from="Player/Timer" to="Player" method="_on_timer_timeout"]
