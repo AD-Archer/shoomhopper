@@ -8,15 +8,6 @@ script/source = "extends Area2D
 @onready var player = %Player
 
 func _ready() -> void:
-	#print(\"Killzone ready\")
-	#print(\"Player reference: \", player)
-	#print(\"Collision mask: \", collision_mask)
-	#print(\"Collision layer: \", collision_layer)
-	#
-	## Debug monitoring state
-	#print(\"Monitoring: \", monitoring)
-	#print(\"Monitorable: \", monitorable)
-	
 	# Force enable monitoring just in case
 	monitoring = true
 	
@@ -25,17 +16,13 @@ func _ready() -> void:
 		connect(\"body_entered\", _on_body_entered)
 
 func _on_body_entered(body: Node2D) -> void:
-	print(\"Body entered: \", body)
-	print(\"Expected player: \", player)
 	
 	if body == player:
 		print(\"You died!\")
 		Engine.time_scale = 0.5
 		body.queue_free()
 		timer.start()
-	else:
-		print(\"Body entered but wasn't player\")
-
+	
 func _on_timer_timeout() -> void:
 	Engine.time_scale = 1
 	get_tree().reload_current_scene()
