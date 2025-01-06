@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3 uid="uid://yw5aias0uhp"]
+
+[sub_resource type="GDScript" id="GDScript_07q0p"]
+resource_name = "killzone"
+script/source = "extends Area2D
+
+@onready var timer: Timer = $Timer
+
+func _on_body_entered(body: Node2D) -> void:
+	print(\"You died!\")
+	Engine.time_scale = 0.5
+	
+	body.get_node(\"CollisionShape2D\").queue_free()
+	
+	timer.start()
+	
+	
+
+func _on_timer_timeout() -> void:
+	Engine.time_scale = 1
+	get_tree().reload_current_scene()
+"
+
+[node name="killzone" type="Area2D"]
+collision_mask = 2
+script = SubResource("GDScript_07q0p")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.6
+one_shot = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

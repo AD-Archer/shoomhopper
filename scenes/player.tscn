@@ -1,0 +1,151 @@
+[gd_scene load_steps=20 format=3 uid="uid://ga0nehdw5pin"]
+
+[ext_resource type="Texture2D" uid="uid://cgstl7rvk6gbf" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Idle/Idle_F_1.png" id="1_vhlkg"]
+[ext_resource type="Texture2D" uid="uid://c84eyjuh2hpcd" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Idle/Idle_F_3.png" id="2_8hpdk"]
+[ext_resource type="Texture2D" uid="uid://cpj15w7sy0d73" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Idle/Idle_F_4.png" id="3_crx8p"]
+[ext_resource type="Texture2D" uid="uid://ciiayi5v0abgc" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Idle/Idle_F_.png" id="4_dvvwu"]
+[ext_resource type="Texture2D" uid="uid://cu3y21jkidl7y" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Idle/Idle_L_1.png" id="5_s15lp"]
+[ext_resource type="Texture2D" uid="uid://drwlw285knxdo" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Idle/Idle_L_2.png" id="6_ntobq"]
+[ext_resource type="Texture2D" uid="uid://b86gm2j6jbw6r" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Idle/Idle_L_3.png" id="7_4fmoa"]
+[ext_resource type="Texture2D" uid="uid://o17n3pxh8e" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Idle/Idle_L_4.png" id="8_wrnxv"]
+[ext_resource type="Texture2D" uid="uid://c5668uly6i0qb" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Jump/Jump_F_1.png" id="9_tuwtx"]
+[ext_resource type="Texture2D" uid="uid://bvcp0wl7brbbm" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Jump/Jump_F_.png" id="10_3awos"]
+[ext_resource type="Texture2D" uid="uid://b40j0jhrix8nc" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Jump/Jump_F_3.png" id="11_wux7f"]
+[ext_resource type="Texture2D" uid="uid://cb3l3m0w71w32" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Jump/Jump_F_4.png" id="12_f4ee4"]
+[ext_resource type="Texture2D" uid="uid://c16rlfp01bxeu" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Walk/Walk_L_1.png" id="13_g6jhh"]
+[ext_resource type="Texture2D" uid="uid://c0qk2k44pau38" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Walk/Walk_L_2.png" id="14_8b1uy"]
+[ext_resource type="Texture2D" uid="uid://b02bv7poxjsr7" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Walk/Walk_L_3.png" id="15_kw7k5"]
+[ext_resource type="Texture2D" uid="uid://bkc6a62u7oiqb" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Walk/Walk_L_4.png" id="16_75l0r"]
+
+[sub_resource type="GDScript" id="GDScript_bpcp4"]
+resource_name = "player.md"
+script/source = "extends CharacterBody2D
+
+# Constants for movement and jump behavior
+var SPEED = 150.0
+var JUMP_VELOCITY = -250.0
+const JUMP_BUFFER_TIME = 0.2  # Time frame in seconds for buffering jumps
+var jump_buffer_timer = 0.0  # Timer to track the jump buffer
+var can_jump = true  # Whether the player can jump (ignores the buffer if false)
+
+var gravity_vector : Vector2 = ProjectSettings.get_setting(\"physics/2d/default_gravity_vector\")
+var gravity_magnitude : int = ProjectSettings.get_setting(\"physics/2d/default_gravity\")
+
+func _physics_process(delta: float) -> void:
+	# Handle gravity
+	if not is_on_floor():
+		velocity.y += gravity_magnitude * delta
+
+	# Handle jump input with a frame buffer (if jump button is pressed recently, perform jump)
+	if Input.is_action_pressed(\"jump\"):
+		# Reset the buffer timer if jump is pressed and the player is on the ground
+		if is_on_floor():
+			jump_buffer_timer = JUMP_BUFFER_TIME  # Reset buffer timer
+
+	if jump_buffer_timer > 0.0:
+		jump_buffer_timer -= delta  # Reduce the jump buffer timer each frame
+
+	# Check if the player can jump, either normally or due to the buffer
+	if (Input.is_action_just_pressed(\"jump\") and is_on_floor()) or (jump_buffer_timer > 0.0 and is_on_floor() and Input.is_action_pressed(\"jump\")):
+		velocity.y = JUMP_VELOCITY
+		jump_buffer_timer = 0.0  # Reset buffer timer once jump is executed
+
+	# Get movement input for left/right movement (continuous input)
+	var direction := Input.get_axis(\"move_left\", \"move_right\")
+	if direction != 0:
+		velocity.x = direction * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)  # Apply deceleration when no input
+
+	# Move the player
+	move_and_slide()
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nuak5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_vhlkg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_8hpdk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_crx8p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_dvvwu")
+}],
+"loop": true,
+"name": &"idle_f",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_s15lp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ntobq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_4fmoa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_wrnxv")
+}],
+"loop": true,
+"name": &"idle_turned",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_tuwtx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_3awos")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_wux7f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_f4ee4")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_g6jhh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_8b1uy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_kw7k5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_75l0r")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_glgu8"]
+size = Vector2(12, 10)
+
+[node name="Player" type="Node2D"]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+script = SubResource("GDScript_bpcp4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D"]
+sprite_frames = SubResource("SpriteFrames_nuak5")
+animation = &"idle_turned"
+autoplay = "idle_f"
+frame_progress = 0.149084
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+position = Vector2(0, 5)
+shape = SubResource("RectangleShape2D_glgu8")
