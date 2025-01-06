@@ -5,16 +5,36 @@ resource_name = "killzone"
 script/source = "extends Area2D
 
 @onready var timer: Timer = $Timer
+@onready var player = %Player
+
+func _ready() -> void:
+	#print(\"Killzone ready\")
+	#print(\"Player reference: \", player)
+	#print(\"Collision mask: \", collision_mask)
+	#print(\"Collision layer: \", collision_layer)
+	#
+	## Debug monitoring state
+	#print(\"Monitoring: \", monitoring)
+	#print(\"Monitorable: \", monitorable)
+	
+	# Force enable monitoring just in case
+	monitoring = true
+	
+	
+	if not is_connected(\"body_entered\", _on_body_entered):
+		connect(\"body_entered\", _on_body_entered)
 
 func _on_body_entered(body: Node2D) -> void:
-	print(\"You died!\")
-	Engine.time_scale = 0.5
+	print(\"Body entered: \", body)
+	print(\"Expected player: \", player)
 	
-	body.get_node(\"CollisionShape2D\").queue_free()
-	
-	timer.start()
-	
-	
+	if body == player:
+		print(\"You died!\")
+		Engine.time_scale = 0.5
+		body.queue_free()
+		timer.start()
+	else:
+		print(\"Body entered but wasn't player\")
 
 func _on_timer_timeout() -> void:
 	Engine.time_scale = 1
@@ -22,7 +42,7 @@ func _on_timer_timeout() -> void:
 "
 
 [node name="killzone" type="Area2D"]
-collision_mask = 2
+collision_layer = 5
 script = SubResource("GDScript_07q0p")
 
 [node name="Timer" type="Timer" parent="."]
