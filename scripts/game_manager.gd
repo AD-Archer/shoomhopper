@@ -15,15 +15,14 @@ func _ready() -> void:
 
 func _on_player_player_died() -> void:
 	if player:
-		# Don't queue_free the player, just disable it
 		player.visible = false
 		player.set_physics_process(false)
 		player.set_process(false)
 
 func update_score_display():
 	if score_label and player:
-		score = player.score  # Get score from player
-		score_label.text = str(int(score))  # Convert to int for cleaner display
+		score = player.score
+		score_label.text = "Score: "+str(int(score))
 
 func _process(_delta: float) -> void:
 	if player and not player.get_is_dead():

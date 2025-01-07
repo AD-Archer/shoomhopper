@@ -2032,7 +2032,7 @@ script = ExtResource("15_di0ds")
 [node name="Player" parent="GameManager" instance=ExtResource("1_vapkw")]
 unique_name_in_owner = true
 z_index = 1
-position = Vector2(-4, -77)
+position = Vector2(-5, 21)
 collision_layer = 5
 collision_mask = 5
 script = ExtResource("2_hvf63")
@@ -2052,6 +2052,26 @@ text = "Score: 12"
 
 [node name="Timer2" type="Timer" parent="GameManager/Player"]
 wait_time = 0.5
+
+[node name="Deathzone" type="StaticBody2D" parent="GameManager/Player"]
+position = Vector2(-5, 60)
+
+[node name="Sprite2D" type="Sprite2D" parent="GameManager/Player/Deathzone"]
+position = Vector2(-41, -31)
+rotation = 1.57008
+scale = Vector2(1, 44.6682)
+texture = ExtResource("8_g4e6j")
+region_enabled = true
+region_rect = Rect2(106, 95, 4, 49)
+
+[node name="Label" type="Label" parent="GameManager/Player/Deathzone"]
+offset_left = -145.0
+offset_top = -29.0
+offset_right = 551.0
+offset_bottom = -6.0
+scale = Vector2(0.45771, 0.594276)
+theme_override_fonts/font = ExtResource("14_nnbbw")
+text = "just so you know... if you fall to fall down  you  will die"
 
 [node name="Layers" type="Node" parent="GameManager"]
 
@@ -2096,6 +2116,7 @@ position = Vector2(53, -233)
 position = Vector2(85, -233)
 
 [node name="PlatformSpawner" parent="GameManager" instance=ExtResource("14_urrj1")]
+position = Vector2(0, -992)
 
 [node name="Platform spawn zone2" type="Path2D" parent="GameManager/PlatformSpawner"]
 position = Vector2(-3, -296)

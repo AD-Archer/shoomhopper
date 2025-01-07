@@ -8,23 +8,33 @@ const SPEED = 170.0
 const JUMP_VELOCITY = -390.0
 const SCORE_MULTIPLIER = 10  # Made this a constant for easy tweaking
 const RESET_DELAY = 0.6  # Define reset delay as constant
+const SPAWN_POSITION = Vector2(-8, 6)
+const DEATH_ZONE_OFFSET = 350  # Same as fall_buffer, but as a constant
 
 var gravity_magnitude : int = ProjectSettings.get_setting("physics/2d/default_gravity")
-var fall_buffer = 350 # how far player can fall without dying
 var max_height = 0.0
+var current_height = 0.0
 var _is_dead = false
 var score = 0.0
 var _is_dying = false  # New state to prevent death loop
 var debug_counter = 0  # Add counter for debugging
 
 @onready var timer = $Timer
+@onready var deathzone = $Deathzone
 
 # Load sounds with error checking
 var death_sound: AudioStream
 var jump_sound: AudioStream
 
 func _ready() -> void:
-	print("[Player] Initializing...")
+	# Ensure we're the only player instance
+	var players = get_tree().get_nodes_in_group("player")
+	if players.size() > 1:
+		queue_free()
+		return
+		
+	add_to_group("player")
+	
 	death_sound = load("res://assets/sounds/explosion.wav")
 	jump_sound = load("res://assets/sounds/jump.wav")
 	if not death_sound or not jump_sound:
@@ -36,6 +46,10 @@ func _ready() -> void:
 	timer.stop()  # Make sure timer is stopped initially
 	
 	reset_player()
+	
+	if not deathzone:
+		push_error("Deathzone node not found!")
+		return
 
 func play_sound(sound: AudioStream) -> void:
 	if not sound:
@@ -53,8 +67,9 @@ func get_is_dead() -> bool:
 
 func reset_player() -> void:
 	timer.stop()  # Make sure timer is stopped
-	position = Vector2(-8, 6)
+	position = SPAWN_POSITION
 	max_height = position.y
+	current_height = position.y
 	_is_dead = false
 	_is_dying = false
 	visible = true
@@ -94,10 +109,20 @@ func _process(_delta: float) -> void:
 	if _is_dead or _is_dying:
 		return
 		
-	if velocity.y < 0 and position.y < max_height:
-		max_height = position.y
-		score = (abs(max_height - position.y) + abs(max_height)) * SCORE_MULTIPLIER
-	if position.y > max_height + fall_buffer:
+	# Update current height
+	current_height = position.y
+	
+	# Update max height only when going up
+	if velocity.y < 0 and current_height < max_height:
+		max_height = current_height
+		score = abs(SPAWN_POSITION.y - max_height) * SCORE_MULTIPLIER
+	
+	# Update deathzone position
+	if deathzone:
+		deathzone.position.y = max_height + DEATH_ZONE_OFFSET
+	
+	# Die if fallen too far from max height
+	if current_height > max_height + DEATH_ZONE_OFFSET:
 		die()
 
 func _on_timer_timeout() -> void:
@@ -109,12 +134,15 @@ func _physics_process(delta: float) -> void:
 	if _is_dead or _is_dying:
 		return
 	
+	# Apply gravity
 	if not is_on_floor():
 		velocity.y += gravity_magnitude * delta
 	else:
+		# Auto-jump when touching the ground
 		velocity.y = JUMP_VELOCITY
 		play_sound(jump_sound)
 	
+	# Horizontal movement
 	var direction := Input.get_axis("move_left", "move_right")
 	if direction != 0:
 		velocity.x = direction * SPEED
