@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3 uid="uid://bvk4l84ji0iuo"]
+
+[ext_resource type="Texture2D" uid="uid://d36w7ea062dh8" path="res://assets/parallax/parallax-00.png" id="1_o8h23"]
+[ext_resource type="Texture2D" uid="uid://fof0q4gb2uxt" path="res://assets/parallax/parallax-01.png" id="2_i0y2r"]
+[ext_resource type="Texture2D" uid="uid://di84q0yfd3t1h" path="res://assets/parallax/parallax-04.png" id="3_lrjc5"]
+[ext_resource type="Texture2D" uid="uid://dqxchevpshi6f" path="res://assets/parallax/parallax-03.png" id="4_6h154"]
+
+[node name="Background" type="Node2D"]
+
+[node name="Parallax2D" type="Parallax2D" parent="."]
+scroll_offset = Vector2(2, 4)
+repeat_size = Vector2(1, 1)
+repeat_times = 4
+ignore_camera_scroll = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D"]
+texture = ExtResource("1_o8h23")
+
+[node name="Parallax2D2" type="Parallax2D" parent="."]
+scroll_offset = Vector2(2, 4)
+repeat_size = Vector2(1, 1)
+repeat_times = 4
+ignore_camera_scroll = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D2"]
+texture = ExtResource("2_i0y2r")
+
+[node name="Parallax2D3" type="Parallax2D" parent="."]
+scroll_offset = Vector2(2, 4)
+repeat_size = Vector2(1, 1)
+repeat_times = 4
+ignore_camera_scroll = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D3"]
+texture = ExtResource("3_lrjc5")
+
+[node name="Parallax2D4" type="Parallax2D" parent="."]
+scroll_offset = Vector2(2, 4)
+repeat_size = Vector2(1, 1)
+repeat_times = 4
+ignore_camera_scroll = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Parallax2D4"]
+texture = ExtResource("4_6h154")
