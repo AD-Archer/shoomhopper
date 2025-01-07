@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=4 uid="uid://bokxsctcx0sbg"]
+[gd_scene load_steps=29 format=4 uid="uid://bokxsctcx0sbg"]
 
 [ext_resource type="PackedScene" uid="uid://ga0nehdw5pin" path="res://scenes/player.tscn" id="1_vapkw"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="2_hvf63"]
@@ -8,7 +8,9 @@
 [ext_resource type="PackedScene" uid="uid://bvk4l84ji0iuo" path="res://scenes/background.tscn" id="5_uyvds"]
 [ext_resource type="Texture2D" uid="uid://xsaot7aje17d" path="res://assets/midground_/summer_.png" id="6_yql57"]
 [ext_resource type="Texture2D" uid="uid://j7uumk0ovnap" path="res://assets/midground_/spring_.png" id="7_4q1o1"]
+[ext_resource type="AudioStream" uid="uid://ceomtplk64hml" path="res://assets/sounds/jump.wav" id="7_7csxl"]
 [ext_resource type="Texture2D" uid="uid://ywld24vb3vv5" path="res://assets/objects_/staticObjects_.png" id="8_g4e6j"]
+[ext_resource type="AudioStream" uid="uid://cq5d862fvdx3c" path="res://assets/sounds/explosion.wav" id="8_lxjqr"]
 [ext_resource type="Texture2D" uid="uid://c66qvd5t0uqk5" path="res://assets/objects_/items_.png" id="9_mkbyn"]
 [ext_resource type="PackedScene" uid="uid://ddslhqipe5jvh" path="res://scenes/greenplatform.tscn" id="13_ti3hp"]
 [ext_resource type="FontFile" uid="uid://4oqsrx2h76pm" path="res://assets/fonts/PixelOperator8.ttf" id="14_nnbbw"]
@@ -2033,10 +2035,10 @@ scale = Vector2(0.560006, 0.8)
 [node name="Timer2" type="Timer" parent="GameManager/Player"]
 wait_time = 0.5
 
-[node name="Deathzone" type="StaticBody2D" parent="GameManager/Player"]
+[node name="popup" type="StaticBody2D" parent="GameManager/Player"]
 position = Vector2(-5, 60)
 
-[node name="Sprite2D" type="Sprite2D" parent="GameManager/Player/Deathzone"]
+[node name="Sprite2D" type="Sprite2D" parent="GameManager/Player/popup"]
 position = Vector2(-41, -31)
 rotation = 1.57008
 scale = Vector2(1, 44.6682)
@@ -2044,7 +2046,7 @@ texture = ExtResource("8_g4e6j")
 region_enabled = true
 region_rect = Rect2(106, 95, 4, 49)
 
-[node name="Label" type="Label" parent="GameManager/Player/Deathzone"]
+[node name="Label" type="Label" parent="GameManager/Player/popup"]
 offset_left = -145.0
 offset_top = -29.0
 offset_right = 551.0
@@ -2052,6 +2054,16 @@ offset_bottom = -6.0
 scale = Vector2(0.45771, 0.594276)
 theme_override_fonts/font = ExtResource("14_nnbbw")
 text = "just so you know... if you fall to fall down  you  will die"
+
+[node name="Sounds" type="Node" parent="GameManager/Player"]
+
+[node name="Death" type="AudioStreamPlayer2D" parent="GameManager/Player/Sounds"]
+stream = ExtResource("8_lxjqr")
+bus = &"SFX"
+
+[node name="Jump" type="AudioStreamPlayer2D" parent="GameManager/Player/Sounds"]
+stream = ExtResource("7_7csxl")
+bus = &"SFX"
 
 [node name="Layers" type="Node" parent="GameManager"]
 

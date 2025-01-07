@@ -1,7 +1,6 @@
-# player.gd
 extends CharacterBody2D
 
-# Signal must be declared at the top
+# Signal declaration
 signal player_died
 
 const SPEED = 170.0
@@ -20,11 +19,9 @@ var _is_dying = false  # New state to prevent death loop
 var debug_counter = 0  # Add counter for debugging
 
 @onready var timer = $Timer
-@onready var deathzone = $Deathzone
-
-# Load sounds with error checking
-var death_sound: AudioStream
-var jump_sound: AudioStream
+@onready var deathzone = $popup
+@onready var death_player = $Sounds/Death
+@onready var jump_player = $Sounds/Jump
 
 func _ready() -> void:
 	# Ensure we're the only player instance
@@ -35,15 +32,10 @@ func _ready() -> void:
 		
 	add_to_group("player")
 	
-	death_sound = load("res://assets/sounds/explosion.wav")
-	jump_sound = load("res://assets/sounds/jump.wav")
-	if not death_sound or not jump_sound:
-		push_warning("[Player] Some sound files couldn't be loaded!")
-	
 	# Configure timer
-	timer.one_shot = true  # Make sure timer only fires once
+	timer.one_shot = true
 	timer.wait_time = RESET_DELAY
-	timer.stop()  # Make sure timer is stopped initially
+	timer.stop()
 	
 	reset_player()
 	
@@ -51,22 +43,11 @@ func _ready() -> void:
 		push_error("Deathzone node not found!")
 		return
 
-func play_sound(sound: AudioStream) -> void:
-	if not sound:
-		return
-	
-	var audio = AudioStreamPlayer.new()
-	audio.stream = sound
-	add_child(audio)
-	audio.play()
-	await audio.finished
-	audio.queue_free()
-
 func get_is_dead() -> bool:
 	return _is_dead
 
 func reset_player() -> void:
-	timer.stop()  # Make sure timer is stopped
+	timer.stop()
 	position = SPAWN_POSITION
 	max_height = position.y
 	current_height = position.y
@@ -77,11 +58,10 @@ func reset_player() -> void:
 	set_process(true)
 	velocity = Vector2.ZERO
 	score = 0
-	debug_counter = 0  # Reset counter
-	Engine.time_scale = 1  # Reset time scale
+	debug_counter = 0
+	Engine.time_scale = 1
 
 func die() -> void:
-	
 	if _is_dead or _is_dying:
 		print("[Player] Die() blocked - already dead or dying")
 		return
@@ -96,14 +76,15 @@ func die() -> void:
 	
 	# Play death sound and emit signal
 	print("[Player] Playing death sound...")
-	play_sound(death_sound)
+	if death_player:
+		death_player.play()
 	print("[Player] Emitting death signal...")
 	emit_signal("player_died")
 	
 	# Slow down time and start reset timer
 	Engine.time_scale = 0.5
 	print("[Player] Starting death timer...")
-	timer.start()  # Timer will only fire once due to one_shot = true
+	timer.start()
 
 func _process(_delta: float) -> void:
 	if _is_dead or _is_dying:
@@ -126,9 +107,8 @@ func _process(_delta: float) -> void:
 		die()
 
 func _on_timer_timeout() -> void:
-	if timer.is_stopped():  # Only reset if timer is actually stopped
+	if timer.is_stopped():
 		reset_player()
-
 
 func _physics_process(delta: float) -> void:
 	if _is_dead or _is_dying:
@@ -140,7 +120,8 @@ func _physics_process(delta: float) -> void:
 	else:
 		# Auto-jump when touching the ground
 		velocity.y = JUMP_VELOCITY
-		play_sound(jump_sound)
+		if jump_player:
+			jump_player.play()
 	
 	# Horizontal movement
 	var direction := Input.get_axis("move_left", "move_right")
@@ -150,4 +131,3 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	
 	move_and_slide()
-# -239 is the platform

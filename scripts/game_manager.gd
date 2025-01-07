@@ -1,5 +1,5 @@
 extends Node
-
+#game_manager
 var score = 0
 @onready var score_label = $"Player/Camera2D/Score"
 @onready var player = %Player
