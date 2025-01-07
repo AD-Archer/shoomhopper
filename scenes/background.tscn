@@ -8,36 +8,40 @@
 [node name="Background" type="Node2D"]
 
 [node name="Parallax2D" type="Parallax2D" parent="."]
-scroll_offset = Vector2(2, 4)
+scroll_scale = Vector2(300, 300)
+scroll_offset = Vector2(840, 360)
 repeat_size = Vector2(1, 1)
-repeat_times = 4
+autoscroll = Vector2(20, 0)
 ignore_camera_scroll = true
 
 [node name="Sprite2D" type="Sprite2D" parent="Parallax2D"]
 texture = ExtResource("1_o8h23")
 
 [node name="Parallax2D2" type="Parallax2D" parent="."]
-scroll_offset = Vector2(2, 4)
+scroll_scale = Vector2(300, 300)
+scroll_offset = Vector2(840, 360)
 repeat_size = Vector2(1, 1)
-repeat_times = 4
+autoscroll = Vector2(60, 0)
 ignore_camera_scroll = true
 
 [node name="Sprite2D" type="Sprite2D" parent="Parallax2D2"]
 texture = ExtResource("2_i0y2r")
 
 [node name="Parallax2D3" type="Parallax2D" parent="."]
-scroll_offset = Vector2(2, 4)
+scroll_scale = Vector2(300, 300)
+scroll_offset = Vector2(840, 360)
 repeat_size = Vector2(1, 1)
-repeat_times = 4
+autoscroll = Vector2(80, 0)
 ignore_camera_scroll = true
 
 [node name="Sprite2D" type="Sprite2D" parent="Parallax2D3"]
 texture = ExtResource("3_lrjc5")
 
 [node name="Parallax2D4" type="Parallax2D" parent="."]
-scroll_offset = Vector2(2, 4)
+scroll_scale = Vector2(300, 300)
+scroll_offset = Vector2(840, 360)
 repeat_size = Vector2(1, 1)
-repeat_times = 4
+autoscroll = Vector2(100, 0)
 ignore_camera_scroll = true
 
 [node name="Sprite2D" type="Sprite2D" parent="Parallax2D4"]

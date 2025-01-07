@@ -2016,6 +2016,15 @@ scale = Vector2(0.36, 0.44)
 theme_override_fonts/font = ExtResource("14_nnbbw")
 text = "Score: 12"
 
+[node name="FPS" type="Label" parent="GameManager/Player/Camera2D"]
+offset_left = 87.0
+offset_top = -83.0
+offset_right = 203.0
+offset_bottom = -60.0
+scale = Vector2(0.36, 0.44)
+theme_override_fonts/font = ExtResource("14_nnbbw")
+text = "FPS: 12"
+
 [node name="Background" parent="GameManager/Player/Camera2D" instance=ExtResource("5_uyvds")]
 z_index = -3
 position = Vector2(-1, -27)
@@ -2085,6 +2094,18 @@ position = Vector2(53, -233)
 [node name="greenplatform5" parent="GameManager/Platforms" instance=ExtResource("13_ti3hp")]
 position = Vector2(85, -233)
 
+[node name="greenplatform6" parent="GameManager/Platforms" instance=ExtResource("13_ti3hp")]
+position = Vector2(-96, -536)
+
+[node name="greenplatform7" parent="GameManager/Platforms" instance=ExtResource("13_ti3hp")]
+position = Vector2(-64, -536)
+
+[node name="greenplatform8" parent="GameManager/Platforms" instance=ExtResource("13_ti3hp")]
+position = Vector2(57, -536)
+
+[node name="greenplatform9" parent="GameManager/Platforms" instance=ExtResource("13_ti3hp")]
+position = Vector2(89, -536)
+
 [node name="PlatformSpawner" parent="GameManager" instance=ExtResource("14_urrj1")]
 position = Vector2(0, -992)
 
@@ -2103,6 +2124,15 @@ offset_bottom = -255.0
 scale = Vector2(0.466529, 0.93165)
 theme_override_fonts/font = ExtResource("14_nnbbw")
 text = "Well Done, Welcome to round two"
+
+[node name="Welcometoroundtwo2" type="Label" parent="GameManager/Text"]
+offset_left = -90.0
+offset_top = -567.0
+offset_right = 310.0
+offset_bottom = -544.0
+scale = Vector2(0.466529, 0.93165)
+theme_override_fonts/font = ExtResource("14_nnbbw")
+text = "I didnt think you would make it"
 
 [node name="welcome" type="Label" parent="GameManager/Text"]
 offset_top = -1.0
