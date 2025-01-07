@@ -2034,6 +2034,9 @@ position = Vector2(-8, 6)
 position = Vector2(-1, 3)
 zoom = Vector2(8, 8)
 
+[node name="Timer2" type="Timer" parent="Player"]
+wait_time = 0.5
+
 [node name="Layers" type="Node" parent="."]
 
 [node name="foreground" type="TileMapLayer" parent="Layers"]
@@ -2058,6 +2061,18 @@ tile_set = SubResource("TileSet_a1sko")
 
 [node name="greenplatform" parent="Platforms" instance=ExtResource("13_ti3hp")]
 position = Vector2(-6, 38)
+
+[node name="greenplatform2" parent="Platforms" instance=ExtResource("13_ti3hp")]
+position = Vector2(-100, -243)
+
+[node name="greenplatform3" parent="Platforms" instance=ExtResource("13_ti3hp")]
+position = Vector2(-68, -243)
+
+[node name="greenplatform4" parent="Platforms" instance=ExtResource("13_ti3hp")]
+position = Vector2(53, -241)
+
+[node name="greenplatform5" parent="Platforms" instance=ExtResource("13_ti3hp")]
+position = Vector2(85, -241)
 
 [node name="killzone" parent="." instance=ExtResource("10_0wmlh")]
 visible = false

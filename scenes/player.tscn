@@ -21,35 +21,51 @@
 resource_name = "player.md"
 script/source = "extends CharacterBody2D
 
-var SPEED = 150.0
-var JUMP_VELOCITY = -330.0
+var SPEED = 170.0
+var JUMP_VELOCITY = -390.0
 var gravity_vector : Vector2 = ProjectSettings.get_setting(\"physics/2d/default_gravity_vector\")
 var gravity_magnitude : int = ProjectSettings.get_setting(\"physics/2d/default_gravity\")
-var fall_buffer = 100
+var fall_buffer = 200
+
 var max_height = 0.0
 @onready var timer = $Timer
+var is_dead = false  # Flag to check if the player is dead
 
 func _ready() -> void:
 	max_height = position.y
+	
+func die() -> void:
+	if is_dead:  # If already dead, don't call die() again
+		return
+	is_dead = true
+	print(\"You died!\")
+	Engine.time_scale = 0.5  # Slow down time when the player dies
+	timer.start()  # Start the timer for scene reload
+	
+	# Stop all movement and physics
+	velocity = Vector2.ZERO  # Stop all movement
+	set_physics_process(false)  # Disable physics processing while dead
+	
+	# Optionally, add death animation here if needed
 
 func _process(_delta: float) -> void:
 	if velocity.y < 0 and position.y < max_height:
 		max_height = position.y
-   
-	if position.y > max_height + fall_buffer:
-		die()
-
-func die() -> void:
-	print(\"You died!\")
-	Engine.time_scale = 0.5
-	queue_free()
-	timer.start()
-
+	
+	# Check if the player has fallen too far
+	if position.y > max_height + fall_buffer and not is_dead:
+		die()  # Call die() only once
+		print(\"this almost worked ig\")
+		
 func _on_timer_timeout() -> void:
-	Engine.time_scale = 1
-	get_tree().reload_current_scene()
+	Engine.time_scale = 1  # Resume normal time scale
+	# Reload the scene after the death animation or pause
+	get_tree().reload_current_scene()  # Reload the current scene to respawn the player
 
 func _physics_process(delta: float) -> void:
+	if is_dead:  # If the player is dead, don't process movement or physics
+		return  # Skip the rest of the physics process
+	
 	if not is_on_floor():
 		velocity.y += gravity_magnitude * delta
 	else:
@@ -61,7 +77,7 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
   
-	move_and_slide()
+	move_and_slide()  # Move the player based on the current velocity
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nuak5"]
@@ -153,3 +169,5 @@ shape = SubResource("RectangleShape2D_glgu8")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.5
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

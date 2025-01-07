@@ -14,6 +14,17 @@ var player_x: float = 0.0
 var player_is_dead: bool = false
 var spawned_platforms: Array[Node] = []
 
+# Assuming gravity and jump velocity are set in project settings
+var gravity_magnitude: float = ProjectSettings.get_setting("physics/2d/default_gravity")
+var jump_velocity: float = -330.0  # Modify this if needed
+
+# Calculate the max jump height
+var max_jump_height: float
+
+# Define minimum and maximum row spacing to prevent platforms being too close or too far
+@export var min_row_spacing: float = 50.0  # Minimum spacing between platforms
+@export var max_row_spacing: float = 150.0  # Maximum spacing between platforms
+
 func _ready() -> void:
 	player = get_node("%Player")
 	
@@ -29,6 +40,10 @@ func _ready() -> void:
 	
 	# Initialize player position and spawn platforms
 	player_x = player.global_position.x
+	
+	# Calculate max jump height
+	max_jump_height = (jump_velocity ** 2) / (2 * gravity_magnitude)
+	
 	spawn_platforms()
 
 func _process(_delta: float) -> void:
@@ -72,6 +87,15 @@ func spawn_platforms() -> void:
 			
 			platform.position = Vector2(base_x, row_y) + random_offset
 			spawned_platforms.append(platform)
+	
+			# Adjust row spacing to ensure platforms are jumpable
+			adjust_platform_spacing()
+
+func adjust_platform_spacing() -> void:
+	# Calculate adjusted row spacing based on max jump height
+	var adjusted_row_spacing = max_jump_height * 1.5  # You can tweak this multiplier for challenge
+	# Clamp the row spacing between minimum and maximum allowed values
+	row_spacing = clamp(adjusted_row_spacing, min_row_spacing, max_row_spacing)
 
 func _exit_tree() -> void:
 	# Clean up platforms when scene changes
