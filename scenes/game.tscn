@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=4 uid="uid://bokxsctcx0sbg"]
+[gd_scene load_steps=29 format=4 uid="uid://bokxsctcx0sbg"]
 
 [ext_resource type="PackedScene" uid="uid://ga0nehdw5pin" path="res://scenes/player.tscn" id="1_vapkw"]
 [ext_resource type="Script" path="res://scripts/player.gd" id="2_hvf63"]
@@ -10,7 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://j7uumk0ovnap" path="res://assets/midground_/spring_.png" id="7_4q1o1"]
 [ext_resource type="Texture2D" uid="uid://ywld24vb3vv5" path="res://assets/objects_/staticObjects_.png" id="8_g4e6j"]
 [ext_resource type="Texture2D" uid="uid://c66qvd5t0uqk5" path="res://assets/objects_/items_.png" id="9_mkbyn"]
-[ext_resource type="PackedScene" uid="uid://yw5aias0uhp" path="res://scenes/killzone.tscn" id="10_0wmlh"]
 [ext_resource type="PackedScene" uid="uid://ddslhqipe5jvh" path="res://scenes/greenplatform.tscn" id="13_ti3hp"]
 [ext_resource type="FontFile" uid="uid://4oqsrx2h76pm" path="res://assets/fonts/PixelOperator8.ttf" id="14_nnbbw"]
 [ext_resource type="PackedScene" uid="uid://bg8r14jwjpqdt" path="res://scenes/platform_spawner.tscn" id="14_urrj1"]
@@ -2018,8 +2017,6 @@ texture = ExtResource("9_mkbyn")
 sources/0 = SubResource("TileSetAtlasSource_5fc3s")
 sources/1 = SubResource("TileSetAtlasSource_8n36f")
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_nfr5u"]
-
 [sub_resource type="Curve2D" id="Curve2D_yegrm"]
 _data = {
 "points": PackedVector2Array(0.424017, 2.5441, -0.424017, -2.5441, 114, -249, 0, 0, 0, 0, -121, -253, 0, 0, 0, 0, -122, 27, 0, 0, 0, 0, 113, 28, 0, 0, 0, 0, 116, -249)
@@ -2035,7 +2032,7 @@ script = ExtResource("15_di0ds")
 [node name="Player" parent="GameManager" instance=ExtResource("1_vapkw")]
 unique_name_in_owner = true
 z_index = 1
-position = Vector2(-8, 6)
+position = Vector2(-4, -77)
 collision_layer = 5
 collision_mask = 5
 script = ExtResource("2_hvf63")
@@ -2059,6 +2056,8 @@ wait_time = 0.5
 [node name="Layers" type="Node" parent="GameManager"]
 
 [node name="foreground" type="TileMapLayer" parent="GameManager/Layers"]
+position = Vector2(-2, -12)
+tile_map_data = PackedByteArray("AAD4//H/AAAAAAYAAAD5//H/AAABAAYAAAD6//H/AAACAAYAAAD7//H/AAADAAYAAAD8//H/AAAEAAYAAAD9//H/AAAFAAYAAAD+//H/AAAGAAYAAAD///H/AAAAAAYAAAAAAPH/AAABAAYAAAABAPH/AAACAAYAAAACAPH/AAADAAYAAAADAPH/AAAEAAYAAAAEAPH/AAAFAAYAAAAFAPH/AAAGAAYAAAAGAPH/AAAHAAYAAAA=")
 tile_set = SubResource("TileSet_mcqqd")
 
 [node name="sky" type="TileMapLayer" parent="GameManager/Layers"]
@@ -2074,7 +2073,8 @@ position = Vector2(-1, 15)
 tile_set = SubResource("TileSet_63esb")
 
 [node name="foreground_items" type="TileMapLayer" parent="GameManager/Layers"]
-position = Vector2(0, -3)
+z_index = 3
+position = Vector2(0, 6)
 tile_map_data = PackedByteArray("AAAGAPH/AAAOAAEAAAAGAPL/AAAOAAIAAAAGAPP/AAAOAAIAAAAGAPT/AAAOAAIAAAAGAPX/AAAOAAIAAAAGAPb/AAAOAAIAAAAGAPf/AAAOAAIAAAAGAPj/AAAOAAIAAAAGAPn/AAAOAAIAAAAGAPr/AAAOAAQAAAAGAPv/AAAOAAQAAAAGAPz/AAAOAAQAAAAGAP3/AAAOAAQAAAD5//H/AAAOAAQAAAD5//L/AAAOAAQAAAD5//P/AAAOAAQAAAD5//T/AAAOAAQAAAD5//X/AAAOAAQAAAD5//b/AAAOAAQAAAD5//f/AAAOAAQAAAD5//j/AAAOAAQAAAD5//n/AAAOAAQAAAD5//r/AAAOAAQAAAD5//v/AAAOAAQAAAD5//z/AAAOAAQAAAD5//3/AAAOAAQAAAD8//D/AQAAAAAAAAACAPD/AQABAAAAAAA=")
 tile_set = SubResource("TileSet_a1sko")
 
@@ -2084,38 +2084,32 @@ tile_set = SubResource("TileSet_a1sko")
 position = Vector2(-6, 38)
 
 [node name="greenplatform2" parent="GameManager/Platforms" instance=ExtResource("13_ti3hp")]
-position = Vector2(-100, -243)
+position = Vector2(-100, -233)
 
 [node name="greenplatform3" parent="GameManager/Platforms" instance=ExtResource("13_ti3hp")]
-position = Vector2(-68, -243)
+position = Vector2(-68, -233)
 
 [node name="greenplatform4" parent="GameManager/Platforms" instance=ExtResource("13_ti3hp")]
-position = Vector2(53, -243)
+position = Vector2(53, -233)
 
 [node name="greenplatform5" parent="GameManager/Platforms" instance=ExtResource("13_ti3hp")]
-position = Vector2(85, -243)
-
-[node name="killzone" parent="GameManager" instance=ExtResource("10_0wmlh")]
-visible = false
-position = Vector2(-18, 58)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GameManager/killzone"]
-position = Vector2(14, 34)
-shape = SubResource("WorldBoundaryShape2D_nfr5u")
+position = Vector2(85, -233)
 
 [node name="PlatformSpawner" parent="GameManager" instance=ExtResource("14_urrj1")]
 
 [node name="Platform spawn zone2" type="Path2D" parent="GameManager/PlatformSpawner"]
+position = Vector2(-3, -296)
 curve = SubResource("Curve2D_yegrm")
 script = ExtResource("14_vij65")
 
 [node name="Text" type="Node" parent="GameManager"]
 
 [node name="Welcometoroundtwo" type="Label" parent="GameManager/Text"]
-offset_left = -193.0
-offset_top = -297.0
-offset_right = 207.0
-offset_bottom = -274.0
+offset_left = -93.0
+offset_top = -278.0
+offset_right = 307.0
+offset_bottom = -255.0
+scale = Vector2(0.466529, 0.93165)
 theme_override_fonts/font = ExtResource("14_nnbbw")
 text = "Well Done, Welcome to round two"
 
@@ -2126,5 +2120,14 @@ offset_bottom = 22.0
 scale = Vector2(0.359999, 0.52)
 theme_override_fonts/font = ExtResource("14_nnbbw")
 text = "Welcome, better hop and see whats up top."
+
+[node name="welcome2" type="Label" parent="GameManager/Text"]
+offset_left = -106.0
+offset_top = 131.0
+offset_right = 504.0
+offset_bottom = 154.0
+scale = Vector2(0.359999, 0.52)
+theme_override_fonts/font = ExtResource("14_nnbbw")
+text = "You should avoid falling...its bad for your health"
 
 [connection signal="player_died" from="GameManager/Player" to="GameManager" method="_on_player_player_died"]

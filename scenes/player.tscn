@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://ga0nehdw5pin"]
+[gd_scene load_steps=19 format=3 uid="uid://ga0nehdw5pin"]
 
 [ext_resource type="Texture2D" uid="uid://cgstl7rvk6gbf" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Idle/Idle_F_1.png" id="1_vhlkg"]
 [ext_resource type="Texture2D" uid="uid://c84eyjuh2hpcd" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Idle/Idle_F_3.png" id="2_8hpdk"]
@@ -16,70 +16,6 @@
 [ext_resource type="Texture2D" uid="uid://c0qk2k44pau38" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Walk/Walk_L_2.png" id="14_8b1uy"]
 [ext_resource type="Texture2D" uid="uid://b02bv7poxjsr7" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Walk/Walk_L_3.png" id="15_kw7k5"]
 [ext_resource type="Texture2D" uid="uid://bkc6a62u7oiqb" path="res://assets/Sprites [Enemies]/Mushroom/Mushroom_1/Walk/Walk_L_4.png" id="16_75l0r"]
-
-[sub_resource type="GDScript" id="GDScript_w8l0c"]
-resource_name = "player.md"
-script/source = "extends CharacterBody2D
-
-var SPEED = 170.0
-var JUMP_VELOCITY = -390.0
-var gravity_vector : Vector2 = ProjectSettings.get_setting(\"physics/2d/default_gravity_vector\")
-var gravity_magnitude : int = ProjectSettings.get_setting(\"physics/2d/default_gravity\")
-var fall_buffer = 350
-var max_height = 0.0
-@onready var timer = $Timer
-@export var is_dead = false  # Flag to check if the player is dead
-
-# Signal to notify the GameManager when the player dies
-
-func _ready() -> void:
-	max_height = position.y
-	
-func die() -> void:
-	if is_dead:  # If already dead, don't call die() again
-		return
-	is_dead = true
-	print(\"You died!\")
-	Engine.time_scale = 0.5  # Slow down time when the player dies
-	timer.start()  # Start the timer for scene reload
-	
-	# Stop all movement and physics
-	velocity = Vector2.ZERO  # Stop all movement
-	set_physics_process(false)  # Disable physics processing while dead
-	
-	# Emit the death signal
-	emit_signal(\"player_died\")
-
-func _process(_delta: float) -> void:
-	if velocity.y < 0 and position.y < max_height:
-		max_height = position.y
-	
-	# Check if the player has fallen too far
-	if position.y > max_height + fall_buffer and not is_dead:
-		die()  # Call die() only once
-		
-func _on_timer_timeout() -> void:
-	Engine.time_scale = 1  # Resume normal time scale
-	# Reload the scene after the death animation or pause
-	get_tree().reload_current_scene()  # Reload the current scene to respawn the player
-
-func _physics_process(delta: float) -> void:
-	if is_dead:  # If the player is dead, don't process movement or physics
-		return  # Skip the rest of the physics process
-	
-	if not is_on_floor():
-		velocity.y += gravity_magnitude * delta
-	else:
-		velocity.y = JUMP_VELOCITY
-
-	var direction := Input.get_axis(\"move_left\", \"move_right\")
-	if direction != 0:
-		velocity.x = direction * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-  
-	move_and_slide()  # Move the player based on the current velocity
-"
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nuak5"]
 animations = [{
@@ -156,7 +92,6 @@ animations = [{
 size = Vector2(12, 10)
 
 [node name="Player" type="CharacterBody2D"]
-script = SubResource("GDScript_w8l0c")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_nuak5")

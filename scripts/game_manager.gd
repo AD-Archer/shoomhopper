@@ -1,8 +1,8 @@
 extends Node
 
-var score = 345434343
+var score = 0
 @onready var score_label = $"Player/Camera2D/Score"
-@onready var player = $Player
+@onready var player = %Player
 
 func _ready() -> void:
 	if not player:
@@ -12,17 +12,19 @@ func _ready() -> void:
 	if not score_label:
 		push_error("Score label node not found!")
 		return
-		
-	player.connect("player_died", _on_player_player_died)
-	
+
 func _on_player_player_died() -> void:
 	if player:
-		player.queue_free()
+		# Don't queue_free the player, just disable it
+		player.visible = false
+		player.set_physics_process(false)
+		player.set_process(false)
 
-func cal_score():
-	if score_label:
-		score_label.text = str(score)
+func update_score_display():
+	if score_label and player:
+		score = player.score  # Get score from player
+		score_label.text = str(int(score))  # Convert to int for cleaner display
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if player and not player.get_is_dead():
-		cal_score()
+		update_score_display()

@@ -1,36 +1,10 @@
 [gd_scene load_steps=2 format=3 uid="uid://yw5aias0uhp"]
 
-[sub_resource type="GDScript" id="GDScript_07q0p"]
-resource_name = "killzone"
-script/source = "extends Area2D
-
-@onready var timer: Timer = $Timer
-@onready var player = %Player
-
-func _ready() -> void:
-	# Force enable monitoring just in case
-	monitoring = true
-	
-	
-	if not is_connected(\"body_entered\", _on_body_entered):
-		connect(\"body_entered\", _on_body_entered)
-
-func _on_body_entered(body: Node2D) -> void:
-	
-	if body == player:
-		print(\"You died!\")
-		Engine.time_scale = 0.5
-		body.queue_free()
-		timer.start()
-	
-func _on_timer_timeout() -> void:
-	Engine.time_scale = 1
-	get_tree().reload_current_scene()
-"
+[ext_resource type="Script" path="res://scripts/killzone.gd" id="1_byqfy"]
 
 [node name="killzone" type="Area2D"]
 collision_layer = 5
-script = SubResource("GDScript_07q0p")
+script = ExtResource("1_byqfy")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.6
